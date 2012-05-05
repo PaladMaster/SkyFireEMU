@@ -26,6 +26,10 @@ enum Spells
     SPELL_DAMPENING_WAVE_H           = 92650,     // Dampening Wave heroic
     SPELL_BURROW                     = 26381,     // Burrow
 };
+enum Eevents
+{
+   EVENT_CRYSTAL_BARRAGE = 1,
+}
 
 class boss_corborus : public CreatureScript
 {
@@ -55,13 +59,12 @@ public:
 
         void Reset()
         {
-            instance->SetData(DATA_CORBORUS_EVENT,NOT_STARTED);
-            _SummonBorerTimer    = 33000;
-            b_BORROW             = 0;
-            _CrystalTimer        = 13600;
-            _DampeningTimer      = 25000;
-            Summons.DespawnAll();
-        }
+            teleCount = 0;
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            me->RemoveAura(65981);
+            phase = 0;
+            events.Reset();
+        }   
 
         void JustDied(Unit* )
         {
@@ -73,6 +76,7 @@ public:
         void EnterCombat(Unit* /*who*/)
         {
             instance->SetData(DATA_CORBORUS_EVENT,IN_PROGRESS);
+            events.ScheduleEvent(EVENT_CRYSTAL_BARRAGE, urand(14000, 17000), 0, 0);
             DoZoneInCombat();
         }
 
