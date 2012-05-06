@@ -162,6 +162,21 @@ public:
         }
     };
 };
+              switch (eventId)
+                {
+                    case EVENT_CRYSTAL_BARRAGE:
+                        if (phase == 0)
+                        {
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true, 0))
+                            {
+                                DoCast(target, SPELL_CRYSTAL_BARRAGE, true);
+
+                                if (me->GetMap()->IsHeroic())
+                                    DoCast(target, SPELL_SUMMON_CRYSTAL_SHARD);
+                            }
+                            events.ScheduleEvent(EVENT_CRYSTAL_BARRAGE, urand(14000, 17000), 0, 0);
+                        }
+                        break;
 
 void AddSC_boss_corborus()
 {
